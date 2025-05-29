@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Image Gallery</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f2f2f2;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+      padding: 20px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: auto;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: transform 0.3s;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      position: relative;
+      max-width: 90%;
+      max-height: 90%;
+    }
+
+    .modal-content img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    .close, .prev, .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: white;
+      font-size: 2em;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 50%;
+      user-select: none;
+    }
+
+    .close {
+      top: 10px;
+      right: 20px;
+      transform: none;
+      font-size: 1.5em;
+    }
+
+    .prev {
+      left: 10px;
+    }
+
+    .next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="gallery">
+  <img src="https://picsum.photos/id/1015/400/300" alt="Image 1">
+  <img src="https://picsum.photos/id/1016/400/300" alt="Image 2">
+  <img src="https://picsum.photos/id/1018/400/300" alt="Image 3">
+  <img src="https://picsum.photos/id/1025/400/300" alt="Image 4">
+  <img src="https://picsum.photos/id/1035/400/300" alt="Image 5">
+  <img src="https://picsum.photos/id/1043/400/300" alt="Image 6">
+</div>
+
+<div class="modal" id="modal">
+  <button class="close" onclick="closeModal()">×</button>
+  <button class="prev" onclick="changeImage(-1)">❮</button>
+  <div class="modal-content">
+    <img id="modal-img" src="" alt="Large View">
+  </div>
+  <button class="next" onclick="changeImage(1)">❯</button>
+</div>
+
+<script>
+  const images = document.querySelectorAll('.gallery img');
+  const modal = document.getElementById('modal');
+  const modalImg = document.getElementById('modal-img');
+  let currentIndex = 0;
+
+  images.forEach((img, index) => {
+    img.addEventListener('click', () => {
+      currentIndex = index;
+      openModal(img.src);
+    });
+  });
+
+  function openModal(src) {
+    modal.style.display = 'flex';
+    modalImg.src = src;
+  }
+
+  function closeModal() {
+    modal.style.display = 'none';
+  }
+
+  function changeImage(direction) {
+    currentIndex += direction;
+    if (currentIndex < 0) currentIndex = images.length - 1;
+    if (currentIndex >= images.length) currentIndex = 0;
+    modalImg.src = images[currentIndex].src;
+  }
+
+  // Close modal when clicking outside the image
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+</script>
+
+</body>
+</html>
